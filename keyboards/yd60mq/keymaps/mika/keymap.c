@@ -10,8 +10,6 @@ enum yd60mq_keycode {
 	WINKEY = SAFE_RANGE
 };
 
-uint8_t default_layer = _WINKEY;
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 	[_WINKEY] = LAYOUT(
@@ -37,26 +35,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-void persistent_default_layer_set(uint16_t default_layer) {
-	eeconfig_update_default_layer(default_layer);
-	default_layer_set(default_layer);
-}
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case WINKEY:
       if (record->event.pressed) {
-		  if (default_layer & (1UL << _WINKEY)) {
-			  persistent_default_layer_set(1UL << _NOWINKEY);
+		  if (biton32(default_layer_state) == _WINKEY) {
+			  set_single_persistent_default_layer(_NOWINKEY);
 		  }
-		  else if (default_layer & (1UL << _NOWINKEY)) {
-			  persistent_default_layer_set(1UL << _WINKEY);
+		  else if (biton32(default_layer_state) == _NOWINKEY) {
+			  set_single_persistent_default_layer(_WINKEY);
 		  }
 	  }
       return false;
       break;
   }
   return true;
+}
+
+void matrix_init_user(void) {
 }
 
 void matrix_scan_user(void) {
