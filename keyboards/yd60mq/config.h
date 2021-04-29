@@ -39,9 +39,6 @@
 #define RGBLIGHT_HUE_STEP 8
 #define RGBLIGHT_SAT_STEP 8
 #define RGBLIGHT_VAL_STEP 8
-<<<<<<< HEAD
-#endif
 #define USB_POLLING_INTERVAL_MS 2
-=======
 // RGBLED_NUM is defined in revisions
->>>>>>> upstream/master
+
