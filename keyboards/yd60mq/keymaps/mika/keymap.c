@@ -63,7 +63,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   case KC_1:
 	  if (record->event.pressed) {
 		  if (e_pressed) {
-			  SEND_STRING(SS_TAP(X_DOWN) SS_TAP(X_ENT) SS_TAP(X_UP) SS_TAP(X_ENT));
+			  SEND_STRING(SS_TAP(X_DOWN) SS_DELAY(50) SS_TAP(X_SPC) SS_DELAY(60) SS_TAP(X_UP) SS_DELAY(60) SS_TAP(X_SPC));
 		  }
 	  }
       return true;
@@ -71,7 +71,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   case KC_2:
 	  if (record->event.pressed) {
 		  if (e_pressed) {
-			  SEND_STRING(SS_TAP(X_DOWN) SS_TAP(X_DOWN) SS_TAP(X_ENT) SS_TAP(X_UP) SS_TAP(X_ENT));
+			  SEND_STRING(SS_TAP(X_DOWN) SS_DELAY(100) SS_TAP(X_DOWN) SS_DELAY(100) SS_TAP(X_SPC) SS_DELAY(60) SS_TAP(X_UP) SS_DELAY(60) SS_TAP(X_SPC));
 		  }
 	  }
       return true;
