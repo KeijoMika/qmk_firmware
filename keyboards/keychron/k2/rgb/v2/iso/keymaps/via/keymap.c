@@ -22,6 +22,7 @@
 #include QMK_KEYBOARD_H
 
 
+
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
@@ -43,6 +44,17 @@ enum layer_names {
 #define KC_MSNP LSFT(LGUI(KC_4))    // Mac snip tool
 #define KC_MSCR LSFT(LGUI(KC_3))    // Mac screenshot
 
+#if defined(KEY_CANCELLATION_ENABLE)
+const key_cancellation_t PROGMEM key_cancellation_list[] = {
+    // on key down
+    //       |    key to be released
+    //       |     |
+    [0] = {KC_D, KC_A},
+    [1] = {KC_A, KC_D},
+};
+#endif
+
+bool process_key_cancellation_user(uint16_t keycode, keyrecord_t *record);
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -63,12 +75,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [WIN_BASE] = LAYOUT_iso(
   /*  0          1          2          3        4        5        6         7        8        9          10          11          12         13         14         15        */
-      KC_ESC,    KC_F1,     KC_F2,     KC_F3,   KC_F4,   KC_F5,   KC_F6,    KC_F7,   KC_F8,   KC_F9,     KC_F10,     KC_F11,     KC_F12,    KC_PSCR,   KC_DEL,    RGB_MOD   ,
+      KC_ESC,    KC_F1,     KC_F2,     KC_F3,   KC_F4,   KC_F5,   KC_F6,    KC_F7,   KC_F8,   KC_F9,     KC_F10,     KC_F11,     KC_F12,    KC_PSCR,   KC_DEL,    RGB_TOG   ,
       KC_GRV,    KC_1,      KC_2,      KC_3,    KC_4,    KC_5,    KC_6,     KC_7,    KC_8,    KC_9,      KC_0,       KC_MINS,    KC_EQL,    KC_BSPC,              KC_PGUP   ,
       KC_TAB,    KC_Q,      KC_W,      KC_E,    KC_R,    KC_T,    KC_Y,     KC_U,    KC_I,    KC_O,      KC_P,       KC_LBRC,    KC_RBRC,                         KC_PGDN   ,
       KC_CAPS,   KC_A,      KC_S,      KC_D,    KC_F,    KC_G,    KC_H,     KC_J,    KC_K,    KC_L,      KC_SCLN,    KC_QUOT,    KC_NUHS,   KC_ENT,               KC_HOME   ,
       KC_LSFT,   KC_NUBS,   KC_Z,      KC_X,    KC_C,    KC_V,    KC_B,     KC_N,    KC_M,    KC_COMM,   KC_DOT,     KC_SLSH,               KC_RSFT,   KC_UP,     KC_END    ,
-      KC_LCTL,   KC_LGUI,   KC_LALT,                              KC_SPC,                                KC_RALT,    MO(MAC_FN), KC_RCTL,   KC_LEFT,   KC_DOWN,   KC_RGHT
+      KC_LCTL,   KC_LGUI,   KC_LALT,                              KC_SPC,                                KC_RALT,    MO(WIN_FN), KC_RCTL,   KC_LEFT,   KC_DOWN,   KC_RGHT
   ),
 
 /*  Windows Fn overlay
@@ -88,9 +100,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [WIN_FN] = LAYOUT_iso(
   /*  0           1           2           3           4           5           6           7           8           9           10          11          12          13          14          15         */
-      QK_BOOT,      KC_BRID,    KC_BRIU,    KC_TASK,    KC_FLXP,    RGB_VAD,    RGB_VAI,    KC_MPRV,    KC_MPLY,    KC_MNXT,    KC_MUTE,    KC_VOLD,    KC_VOLU,    KC_PSCR,    KC_INS,     RGB_TOG    ,
+      QK_BOOT,      KC_BRID,    KC_BRIU,    KC_TASK,    KC_FLXP,    RGB_VAD,    RGB_VAI,    KC_MPRV,    KC_MPLY,    KC_MNXT,    KC_MUTE,    KC_VOLD,    KC_VOLU,    KC_PSCR,    KC_INS,     RGB_MOD    ,
       _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,                _______    ,
-      _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,                            _______    ,
+      KX_CATG,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,                            _______    ,
       _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,                _______    ,
       _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,                _______,    RGB_SAI,    _______    ,
       _______,    _______,    _______,                                        _______,                                        _______,    _______,    _______,    RGB_HUD,    RGB_SAD,    RGB_HUI
@@ -169,7 +181,19 @@ bool dip_switch_update_user(uint8_t index, bool active){
   return true;
 }
 
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (host_keyboard_led_state().caps_lock) {
+        RGB_MATRIX_INDICATOR_SET_COLOR(45, 0, 0, 255);
+    } else {
+        RGB_MATRIX_INDICATOR_SET_COLOR(45, 0, 0, 0);
+    }
+	return false;
+}
+
+
 void keyboard_post_init_user(void) {
+//rgblight_enable_noeeprom();
+//rgblight_sethsv_noeeprom(240, 255, 255);
   // Customise these values to desired behaviour
   //debug_enable=true;
   //debug_matrix=true;

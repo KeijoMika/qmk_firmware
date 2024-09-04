@@ -63,7 +63,7 @@
 #endif
 
 #ifndef RGB_MATRIX_DEFAULT_HUE
-#    define RGB_MATRIX_DEFAULT_HUE 0
+#    define RGB_MATRIX_DEFAULT_HUE 240
 #endif
 
 #ifndef RGB_MATRIX_DEFAULT_SAT
