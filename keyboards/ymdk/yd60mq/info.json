@@ -15,7 +15,7 @@
         "extrakey": true,
         "mousekey": true,
         "nkro": true,
-        "rgblight": true
+        "rgblight": false
     },
     "qmk": {
         "locking": {
@@ -32,15 +32,17 @@
         "pin": "B7",
         "levels": 5
     },
-    "indicators": {
-        "caps_lock": "F4",
-        "on_state": 0
-      },
     "ws2812": {
         "pin": "E2"
     },
     "processor": "atmega32u4",
     "bootloader": "atmel-dfu",
+	"debounce_type":"asym_eager_defer_pk",
+	"debounce": 5,
+	"indicators": {
+        "caps_lock": "F4",
+        "on_state": 0
+    },
     "community_layouts": ["60_ansi", "60_ansi_split_bs_rshift", "60_ansi_tsangan", "60_hhkb", "60_iso", "60_iso_split_bs_rshift", "60_iso_tsangan"],
     "layout_aliases": {
         "LAYOUT": "LAYOUT_all"
