@@ -27,7 +27,7 @@
 #endif
 
 /* Set 0 if debouncing isn't needed */
-#define DEBOUNCE 5
+#define DEBOUNCE 20
 /* Mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap */
 #define LOCKING_SUPPORT_ENABLE
 
@@ -40,4 +40,3 @@
 #define RGBLIGHT_VAL_STEP 8
 #define USB_POLLING_INTERVAL_MS 2
 // RGBLED_NUM is defined in revisions
-
